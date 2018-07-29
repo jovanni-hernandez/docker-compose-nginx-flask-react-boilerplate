@@ -1,0 +1,16 @@
+##########
+# Deploys a flask app over local port 5090 using flask's built in dev server
+###########
+
+FROM python:3.6
+
+COPY requirements.txt . 
+
+# Download Python dependencies
+RUN pip install -r requirements.txt
+
+WORKDIR /app
+
+# Use not flask's dev/test server for API
+EXPOSE 5090
+CMD ["python", "app.py"]

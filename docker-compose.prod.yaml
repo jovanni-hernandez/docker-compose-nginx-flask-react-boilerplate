@@ -1,0 +1,32 @@
+version: '3'
+services:
+    ui:
+        build:
+            context: ui
+            dockerfile: Dockerfile.prod
+        volumes:
+            -  static-ui-content:/app/build
+    api:
+        build:
+            context: api
+            dockerfile: Dockerfile.prod
+        networks:
+            - web_nw    
+    proxy:
+        build:
+            context: proxy
+            dockerfile: Dockerfile.prod
+        volumes:
+            -  static-ui-content:/ui
+        depends_on:
+            - ui
+            - api
+        ports:
+            - "80:80"
+        networks:
+            - web_nw          
+networks:
+    web_nw:
+        driver: bridge
+volumes:
+    static-ui-content:

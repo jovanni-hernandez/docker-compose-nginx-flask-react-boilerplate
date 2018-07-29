@@ -1,0 +1,17 @@
+##########
+# Downloads & compiles create-react-app, saving built app to shared volume
+###########
+
+FROM node
+
+WORKDIR /app
+
+RUN git clone https://github.com/tiburon-security/petrichor-dashboard.git .
+
+WORKDIR app
+
+RUN yarn
+
+EXPOSE 3000
+
+CMD ["yarn", "start", "&"]

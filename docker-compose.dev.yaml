@@ -1,0 +1,39 @@
+version: '3'
+services:
+    ui:
+        build:
+            context: ui
+            dockerfile: Dockerfile.dev
+        networks:
+            - web_nw 
+        volumes:
+            -  static-ui-content:/app/build
+        restart: always
+    api:
+        build:
+            context: api
+            dockerfile: Dockerfile.dev
+        networks:
+            - web_nw  
+        volumes:
+            - ./api/src:/app
+        restart: always
+    proxy:
+        build:
+            context: proxy
+            dockerfile: Dockerfile.dev
+        volumes:
+            -  static-ui-content:/ui
+        depends_on:
+            - ui
+            - api
+        ports:
+            - "8080:80"
+        networks:
+            - web_nw
+        restart: always
+networks:
+    web_nw:
+        driver: bridge
+volumes:
+    static-ui-content:
